@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hero vs Villain Game</title>
+
+    <style>
+        body {
+            background-color: #1e1e1e;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            color: gold;
+        }
+
+        .game-container {
+            background-color: #333;
+            width: 350px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px black;
+        }
+
+        .character {
+            margin: 15px 0;
+            font-size: 18px;
+        }
+
+        .hp {
+            font-weight: bold;
+            color: lightgreen;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .attack {
+            background-color: crimson;
+            color: white;
+        }
+
+        .heal {
+            background-color: green;
+            color: white;
+        }
+
+        .reset {
+            background-color: gray;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>⚔️ Hero vs Villain ⚔️</h1>
+
+<div class="game-container">
+
+    <div class="character">
+        🦸 Hero HP: <span class="hp" id="heroHP">100</span>
+    </div>
+
+    <div class="character">
+        🦹 Villain HP: <span class="hp" id="villainHP">100</span>
+    </div>
+
+    <button class="attack" onclick="attack()">Attack</button>
+    <button class="heal" onclick="heal()">Heal</button>
+    <button class="reset" onclick="resetGame()">Reset</button>
+
+</div>
+
+<script>
+    let heroHP = 100;
+    let villainHP = 100;
+
+    function attack() {
+        heroHP -= Math.floor(Math.random() * 10) + 5;
+        villainHP -= Math.floor(Math.random() * 15) + 5;
+
+        updateHP();
+        checkWinner();
+    }
+
+    function heal() {
+        heroHP += Math.floor(Math.random() * 10) + 5;
+        if (heroHP > 100) heroHP = 100;
+
+        updateHP();
+    }
+
+    function resetGame() {
+        heroHP = 100;
+        villainHP = 100;
+        updateHP();
+    }
+
+    function updateHP() {
+        document.getElementById("heroHP").innerText = heroHP;
+        document.getElementById("villainHP").innerText = villainHP;
+    }
+
+    function checkWinner() {
+        if (heroHP <= 0) {
+            alert("Villain Wins!");
+            resetGame();
+        } else if (villainHP <= 0) {
+            alert("Hero Wins!");
+            resetGame();
+        }
+    }
+</script>
+
+</body>
+</html>
