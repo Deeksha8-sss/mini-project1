@@ -1,62 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Hero vs Villain Game</title>
-
     <style>
         body {
             background-color: #1e1e1e;
-            font-family: Arial, sans-serif;
-            text-align: center;
             color: white;
+            font-family: Arial;
+            text-align: center;
         }
 
-        h1 {
-            color: gold;
-        }
-
-        .game-container {
-            background-color: #333;
+        .game-box {
+            background: #333;
             width: 350px;
-            margin: 50px auto;
+            margin: 40px auto;
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 0 10px black;
-        }
-
-        .character {
-            margin: 15px 0;
-            font-size: 18px;
-        }
-
-        .hp {
-            font-weight: bold;
-            color: lightgreen;
         }
 
         button {
             padding: 10px 15px;
-            margin: 10px;
+            margin: 8px;
             font-size: 16px;
-            border: none;
             border-radius: 8px;
+            border: none;
             cursor: pointer;
         }
 
-        .attack {
-            background-color: crimson;
-            color: white;
-        }
+        .attack { background: red; color: white; }
+        .heal { background: green; color: white; }
+        .reset { background: gray; color: white; }
 
-        .heal {
-            background-color: green;
-            color: white;
-        }
-
-        .reset {
-            background-color: gray;
-            color: white;
+        .winner {
+            margin-top: 15px;
+            font-size: 20px;
+            color: gold;
         }
     </style>
 </head>
@@ -65,60 +43,77 @@
 
 <h1>⚔️ Hero vs Villain ⚔️</h1>
 
-<div class="game-container">
+<div class="game-box">
 
-    <div class="character">
-        🦸 Hero HP: <span class="hp" id="heroHP">100</span>
-    </div>
+    <p>🦸 Hero HP: <span id="heroHP">100</span></p>
+    <p>🦹 Villain HP: <span id="villainHP">100</span></p>
 
-    <div class="character">
-        🦹 Villain HP: <span class="hp" id="villainHP">100</span>
-    </div>
+    <p>⭐ Hero Points: <span id="heroPoints">0</span></p>
+    <p>⭐ Villain Points: <span id="villainPoints">0</span></p>
 
     <button class="attack" onclick="attack()">Attack</button>
     <button class="heal" onclick="heal()">Heal</button>
     <button class="reset" onclick="resetGame()">Reset</button>
+
+    <div class="winner" id="winnerText"></div>
 
 </div>
 
 <script>
     let heroHP = 100;
     let villainHP = 100;
+    let heroPoints = 0;
+    let villainPoints = 0;
 
     function attack() {
-        heroHP -= Math.floor(Math.random() * 10) + 5;
-        villainHP -= Math.floor(Math.random() * 15) + 5;
-
-        updateHP();
+        heroHP -= random(5, 10);
+        villainHP -= random(5, 15);
+        updateGame();
         checkWinner();
     }
 
     function heal() {
-        heroHP += Math.floor(Math.random() * 10) + 5;
+        heroHP += random(5, 10);
         if (heroHP > 100) heroHP = 100;
+        updateGame();
+    }
 
-        updateHP();
+    function checkWinner() {
+        if (heroHP <= 0) {
+            villainPoints += 10;
+            document.getElementById("winnerText").innerText = "🏆 Villain Wins!";
+            disableButtons();
+        } 
+        else if (villainHP <= 0) {
+            heroPoints += 10;
+            document.getElementById("winnerText").innerText = "🏆 Hero Wins!";
+            disableButtons();
+        }
+        updateGame();
+    }
+
+    function disableButtons() {
+        document.querySelectorAll("button.attack, button.heal")
+            .forEach(btn => btn.disabled = true);
     }
 
     function resetGame() {
         heroHP = 100;
         villainHP = 100;
-        updateHP();
+        document.getElementById("winnerText").innerText = "";
+        document.querySelectorAll("button").forEach(btn => btn.disabled = false);
+        updateGame();
     }
 
-    function updateHP() {
+    function updateGame() {
         document.getElementById("heroHP").innerText = heroHP;
         document.getElementById("villainHP").innerText = villainHP;
+        document.getElementById("heroPoints").innerText = heroPoints;
+        document.getElementById("villainPoints").innerText = villainPoints;
     }
 
-    function checkWinner() {
-        if (heroHP <= 0) {
-            alert("Villain Wins!");
-            resetGame();
-        } else if (villainHP <= 0) {
-            alert("Hero Wins!");
-            resetGame();
-        }
+    function random(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 </script>
 
